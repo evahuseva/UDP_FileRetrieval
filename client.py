@@ -14,10 +14,13 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPClientSocket.sendto(bytesToSend, serverAddressPort)
 
 while True:
+
     try:
-        server_buffer = UDPClientSocket.recvfrom(bufferSize)[0]
+        print('Client is waiting')
         # breakpoint()
+        server_buffer = UDPClientSocket.recvfrom(bufferSize)[0]
         if len(server_buffer) > 0:
+            print('Client received something')
             server_message = server_buffer.decode('utf-8')
             if server_message == 'NO_FILE':
                 print('No such file in workers directory.')
@@ -30,4 +33,5 @@ while True:
                 f.write(server_buffer)
                 f.close()
     except Exception as e:
+        print("error")
         print(e)
