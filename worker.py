@@ -14,7 +14,7 @@ UDPWorkerSocket.bind(('172.25.0.2', 4900))
 print('UDP Worker is connected and operating.')
 
 while True:
-    time.sleep(1)
+    time.sleep(0.1)
     bytesAddressPair = UDPWorkerSocket.recvfrom(bufferSize)
     message = bytesAddressPair[0]
     address = bytesAddressPair[1]

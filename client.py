@@ -1,9 +1,10 @@
 import socket
+import sys
 import time
 
 msgFromClient = input('Name of the file to import: ')
 print(msgFromClient)
-bytesToSend = str.encode(msgFromClient, 'ascii')
+bytesToSend = str.encode(msgFromClient, 'utf-8')
 serverAddressPort = ('172.25.0.3', 4900)
 bufferSize = 1024
 
@@ -13,19 +14,21 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPClientSocket.sendto(bytesToSend, serverAddressPort)
 
 while True:
-    time.sleep(1)
-    server_buffer = UDPClientSocket.recvfrom(bufferSize)[0]
-    msg = server_buffer.decode('utf-8')
-    print('Client received something from the server.')
-    print(msg)
-    # new_file = open('client_writer.txt', 'w+')
-    # data = new_file.write(bufferSize)
-    if server_buffer:
-        server_buffer = UDPClientSocket.recvfrom(bufferSize)[0]
-        print(server_buffer.decode('utf-8'))
-        if msg == 'NO_FILE':
-            print('No such file in workers directory.')
-        elif msg == 'END_OF_FßILE':
-            print('Empty file.')
-        else:
-            print(msg)
+    time.sleep(0.1)
+    try:
+        server_buffer, _ = UDPClientSocket.recvfrom(bufferSize)
+        # breakpoint()
+        if len(server_buffer) > 0:
+            server_message = server_buffer.decode('utf-8')
+            if server_message == 'NO_FILE':
+                print('No such file in workers directory.')
+                sys.exit()
+            elif server_message == 'END_OF_FILE':
+                print('Empty file.')
+                sys.exit()
+            else:
+                f = open(msgFromClient, 'wb')
+                f.write(server_buffer)
+                f.close()
+    except Exception as e:
+        print(e)
