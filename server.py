@@ -13,23 +13,20 @@ UDPServerSocket.bind(('172.25.0.3', 4900))
 print('UDP server up and listening.')
 
 while True:
-    time.sleep(0.1)
-    # getting file name from client
+    time.sleep(1)
     client_buffer = UDPServerSocket.recvfrom(bufferSize)[0]
-    # with open(filename, mode="rb") as f:
-    #    chunk = f.read(buffer_size)
-    print('Server started its work and received something from workers.')
     clientMsg = 'Message from client:{}'.format(client_buffer.decode('utf-8'))
-    # workerMsg = "Message from Worker:{}".format(worker_buffer.decode('ascii'))
+    print(clientMsg)
     for workerAddressPort in workerAddressPorts:
         UDPServerSocket.sendto(client_buffer, workerAddressPort)    # sending file name to worker
+        print(f'Client buffer sent to worker {workerAddressPort[0]}')
         worker_buffer = UDPServerSocket.recvfrom(bufferSize)[0]     # saving data from worker to buffer
+        print(f'Buffer received from worker {workerAddressPort[0]}.')
         UDPServerSocket.sendto(worker_buffer, clientAddressPort)    # sending buffer data to client
-
-        # print(worker_buffer.decode('utf-8'))
-        # splitting the file to prevent buffer overflow:
-        while not worker_buffer:
+        print('Worker buffer sent to client')
+        while not worker_buffer:                                    # splitting the file to prevent buffer overflow
             worker_buffer = UDPServerSocket.recvfrom(bufferSize)[0]
-            # print(worker_buffer.decode('utf-8'))
+            print(f'Buffer received from worker {workerAddressPort[0]}.')
             UDPServerSocket.sendto(worker_buffer, clientAddressPort)
+            print('Worker buffer sent to client')
     print('Sent file to client.')

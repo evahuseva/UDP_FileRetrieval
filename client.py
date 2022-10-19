@@ -14,9 +14,8 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPClientSocket.sendto(bytesToSend, serverAddressPort)
 
 while True:
-    time.sleep(0.1)
     try:
-        server_buffer, _ = UDPClientSocket.recvfrom(bufferSize)
+        server_buffer = UDPClientSocket.recvfrom(bufferSize)[0]
         # breakpoint()
         if len(server_buffer) > 0:
             server_message = server_buffer.decode('utf-8')
