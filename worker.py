@@ -4,12 +4,12 @@ import os
 from os.path import exists
 
 bufferSize = 1024
-serverAddressPort = ('172.25.0.2', 4916)
+serverAddressPort = ('172.25.0.3', 4916)
 
 # Create a datagram socket
 # Binding to address and ip
 UDPWorkerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPWorkerSocket.bind(('172.25.0.3', 4916))
+UDPWorkerSocket.bind(('172.25.0.2', 4916))
 
 print('UDP Worker is connected and operating.')
 

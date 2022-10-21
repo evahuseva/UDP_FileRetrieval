@@ -6,12 +6,12 @@ from _thread import *
 # Create a datagram socket
 # Binding to address and ip
 UDPServerClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPServerClientSocket.bind(('172.25.0.2', 4900))
+UDPServerClientSocket.bind(('172.25.0.3', 4900))
 
 UDPServerWorkerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPServerWorkerSocket.bind(('172.25.0.2', 4916))
+UDPServerWorkerSocket.bind(('172.25.0.3', 4916))
 
-workerAddressPorts = [('172.25.0.3', 4916), ('172.25.0.5', 4916), ('172.25.0.6', 4916)]
+workerAddressPorts = [('172.25.0.2', 4916), ('172.25.0.5', 4916), ('172.25.0.6', 4916)]
 clientAddressPort = ('172.25.0.4', 4900)
 bufferSize = 1024
 
@@ -49,3 +49,6 @@ t1.start()
 
 t2 = threading.Thread(target=worker_sender)
 t2.start()
+
+t1.join()
+t2.join()

@@ -1,14 +1,11 @@
-import select
 import socket
 import sys
-import time
 import threading
 
-
-msgFromClient = str(input('Name of the file to import: '))
+msgFromClient = input('Name of the file to import: ')
 UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 bufferSize = 1024
-serverAddressPort = ('172.25.0.2', 4900)
+serverAddressPort = ('172.25.0.3', 4900)
 
 
 def sender():
@@ -20,10 +17,10 @@ def sender():
 def receiver():
     while True:
         try:
-            server_buffer, server_address = UDPClientSocket.recvfrom(bufferSize)
+            server_buffer = UDPClientSocket.recvfrom(bufferSize)[0]
             # breakpoint()
             server_message = server_buffer.decode('utf-8')
-            print(f'Server {server_address[0]} sent message {server_message}')
+            print(f'Server sent message {server_message}')
             f = open(msgFromClient, 'wb')
             f.write(server_buffer)
             f.close()
@@ -40,8 +37,9 @@ def receiver():
                     print('server_message')
                     f.write(server_buffer)
                     f.close()
+
         except Exception as e:
-            print(e)
+            print(e, 'error')
         return
 
 
@@ -54,6 +52,3 @@ t1.start()
 t2.start()
 
     # wait until thread 1 is completely executed
-t1.join()
-    # wait until thread 2 is completely executed
-t2.join()
