@@ -37,18 +37,12 @@ def receiver():
                     print('server_message')
                     f.write(server_buffer)
                     f.close()
-
         except Exception as e:
             print(e, 'error')
-        return
 
 
 t1 = threading.Thread(target=sender)
 t2 = threading.Thread(target=receiver)
 
-    # starting thread 1
 t1.start()
-    # starting thread 2
 t2.start()
-
-    # wait until thread 1 is completely executed
