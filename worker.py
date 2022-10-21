@@ -4,12 +4,12 @@ import os
 from os.path import exists
 
 bufferSize = 1024
-serverAddressPort = ('172.25.0.3', 4916)
+serverAddressPort = ('172.25.0.2', 4916)
 
 # Create a datagram socket
 # Binding to address and ip
 UDPWorkerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPWorkerSocket.bind(('172.25.0.2', 4916))
+UDPWorkerSocket.bind(('172.25.0.3', 4916))
 
 print('UDP Worker is connected and operating.')
 
@@ -31,7 +31,8 @@ while True:
             if UDPWorkerSocket.sendto(data, serverAddressPort):
                 data = new_file.read(bufferSize)
                 time.sleep(1)
-            print('Sent file to server.')
+        UDPWorkerSocket.sendto(str.encode('S' + 'uccessfully sent.'), serverAddressPort)
+        print('Sent file to server.')
     else:
-        UDPWorkerSocket.sendto(str.encode('N'+'No file found.'), serverAddressPort)
-        print(f'No file {file_name} found.')
+        UDPWorkerSocket.sendto(str.encode('N'+'o file found.'), serverAddressPort)
+        print(f'No file <<{file_name}>> found.')
