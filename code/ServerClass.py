@@ -67,13 +67,13 @@ class Server:
     print('Stopped processing file requests.')
 
     def __worker_listen(self):
-        while True:
-            time.sleep(self.delay)
-            try:
+        try:
+            while True:
+                time.sleep(self.delay)
                 worker_buffer, worker_address_and_port = self.worker_socket.recvfrom(self.buffer_size)
                 self.__worker_process(worker_address_and_port, worker_buffer)
-            except KeyError:
-                pass
+        except KeyError:
+            pass
     print('Stopped listening to workers.')
 
     def __task_add(self, client_task: FileTask):
