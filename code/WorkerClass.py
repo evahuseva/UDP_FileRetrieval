@@ -63,11 +63,12 @@ class Worker:
             buffer, _ = self.socket.recvfrom(self.buffer_size)
             self.queue.put(buffer)
             print(f'Message came from server {_[0]}:{_[1]} with task id {buffer[:32].hex()} and content'
-                  + f' {buffer[16:].decode("utf-8")}. ')
+                  + f' {buffer[32:].decode("utf-8")}. ')
         print('Stopped listening. ')
 
 # processing the operations and sending the response about actions
     def __respond(self):
+        print(self.continue_process)
         while self.continue_process:
             time.sleep(self.delay)
             server_buffer: bytes = self.queue.get(block=True)
@@ -91,10 +92,9 @@ class Worker:
                 else:
                     print(f'File {file_path} not found. ')
                     self.__send(request_id, 'NONE')
-                break
         print('Stopped responding. ')
 
-# listening to input commands
+# listening to input commands and committing according actions
     def __input(self):
         print('Started listening for input. ')
         while self.continue_input:
@@ -103,10 +103,10 @@ class Worker:
                 self.__join(command)
             elif command == 'LEAVE':
                 self.__leave()
-            elif command == 'QUIT' or command == 'EXIT' or command == 'Q':
+            elif command == 'QUIT' or command == 'EXIT' or command == 'Q' or command == 'STOP' or command == 'EXIT':
                 print('Not listening for input anymore. ')
                 self.__quit()
-                sys.exit()
+                break
             else:
                 self.__unknown(command)
         print('Not listening for input anymore. ')

@@ -62,22 +62,25 @@ class Server:
                 client_task.workers = self.workers.copy()
                 self.__task_add(client_task)
                 if len(client_task.workers) > 0:
+                    print('Task has workers. ')
                     for worker in client_task.workers:
                         self.worker_socket.sendto(worker_buffer, worker)
                 else:
-                    self.client_in_queue.put(client_task, block=True)
-    print('Stopped processing file requests.')
+                    print('Task has no workers. ')
+                    self.client_socket.sendto(b'NONE', client_task.address_and_port)
+                    # self.client_in_queue.put(client_task, block=True)
+        print('Stopped processing file requests.')
 
 # receiving the response from workers
     def __worker_listen(self):
-        try:
-            while True:
+        while True:
+            try:
                 time.sleep(self.delay)
                 worker_buffer, worker_address_and_port = self.worker_socket.recvfrom(self.buffer_size)
                 self.__worker_process(worker_address_and_port, worker_buffer)
-        except KeyError:
-            pass
-    print('Stopped listening to workers.')
+            except KeyError:
+                print('KeyError happened. ')
+        print('Stopped listening to workers.')
 
     def __task_add(self, client_task: FileTask):
         self.task_lock.acquire(blocking=True)
