@@ -1,0 +1,9 @@
+docker create --name client-0 -v /Users/macbookpro/PycharmProjects/UDP_FileTransmitter/code:/code -v /Users/macbookpro/PycharmProjects/UDP_FileTransmitter/client_files:/files --network newnet --ip 172.25.0.2 --cap-add all -ti netimg
+
+docker create --name server-0 -v /Users/macbookpro/PycharmProjects/UDP_FileTransmitter/code:/code --network newnet --ip 172.25.0.3 --cap-add all -ti netimg
+
+docker create --name worker-0 -v /Users/macbookpro/PycharmProjects/UDP_FileTransmitter/code:/code -v /Users/macbookpro/PycharmProjects/UDP_FileTransmitter/worker0_files:/worker_files --network newnet --ip 172.25.0.4 --cap-add all -ti netimg
+
+docker create --name worker-1 -v /Users/macbookpro/PycharmProjects/UDP_FileTransmitter/code:/code -v /Users/macbookpro/PycharmProjects/UDP_FileTransmitter/worker1_files:/worker_files --network newnet --ip 172.25.0.5 --cap-add all -ti netimg
+
+docker create --name worker-2 -v /Users/macbookpro/PycharmProjects/UDP_FileTransmitter/code:/code -v /Users/macbookpro/PycharmProjects/UDP_FileTransmitter/worker2_files:/worker_files --network newnet --ip 172.25.0.6 --cap-add all -ti netimg
