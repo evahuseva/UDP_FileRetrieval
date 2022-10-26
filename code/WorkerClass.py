@@ -27,6 +27,7 @@ class Worker:
 
         self.queue: queue.Queue = queue.Queue()
 
+# 'start' and 'stop' are used for threading
     def start(self):
         self.socket.bind(self.address_and_port)
         self.continue_listen = True
@@ -55,6 +56,7 @@ class Worker:
             self.thread_listen.join(1)
         exit()
 
+# checking the buffer for received bytes
     def __listen(self):
         while self.continue_listen:
             time.sleep(self.delay)
@@ -64,6 +66,7 @@ class Worker:
                   + f' {buffer[16:].decode("utf-8")}. ')
         print('Stopped listening. ')
 
+# processing the operations and sending the response about actions
     def __respond(self):
         while self.continue_process:
             time.sleep(self.delay)
@@ -91,6 +94,7 @@ class Worker:
                 break
         print('Stopped responding. ')
 
+# listening to input commands
     def __input(self):
         print('Started listening for input. ')
         while self.continue_input:

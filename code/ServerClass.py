@@ -37,6 +37,7 @@ class Server:
         self.worker_listen_thread.start()
         print(f'Server socket up and listening for workers at {self.ip_address}:{self.worker_port}. ')
 
+# receiving the message from client
     def __client_listen(self):
         print('Client listener started. ')
         while True:
@@ -49,6 +50,7 @@ class Server:
             self.client_in_queue.put(item=task)
     print('Stopped listening for clients.')
 
+# transmitting the client message to workers
     def __client_process(self):
         while True:
             time.sleep(self.delay)
@@ -66,6 +68,7 @@ class Server:
                     self.client_in_queue.put(client_task, block=True)
     print('Stopped processing file requests.')
 
+# receiving the response from workers
     def __worker_listen(self):
         try:
             while True:
@@ -137,7 +140,6 @@ class Server:
                 self.__client_send(task, worker_buffer_content)
                 self.__task_remove(task)
 
+# sending the files, received from workers, to the client
     def __client_send(self, task: FileTask, buffer: bytes):
         self.client_socket.sendto(buffer, task.address_and_port)
-
-
