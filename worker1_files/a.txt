@@ -1,1 +1,0 @@
-Hello UDP client! This is another text file, which lies in worker-1 directory.
